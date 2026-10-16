@@ -50,7 +50,6 @@ def index():
 def colors():
     data = request.json
     color = data.get('colordata')
-    print(color)
 
     color = color.lstrip('#')
     color = tuple(int(color[i:i+2], 16) for i in (0, 2, 4))
@@ -58,12 +57,10 @@ def colors():
     pixels.fill(color)
     pixels.show()
 
-    print(color)
-
     return jsonify({"message":"color received"})
 
 if __name__ == '__main__':
-	pixels.fill((255, 0, 0))
-	pixels.show()
+    pixels.fill((255, 0, 0))
+    pixels.show()
 
-	app.run(host='0.0.0.0',port = 80,debug=False)
+    app.run(host='0.0.0.0', port = 80, debug=False)
