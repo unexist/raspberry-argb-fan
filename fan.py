@@ -1,3 +1,13 @@
+#
+# @file raspberry-argb-fan
+#
+# @copyright (c) 2026-present, Christoph Kappel <christoph@unexist.dev>
+# @version $Id$
+#
+# This program can be distributed under the terms of the GNU GPL.
+# See the file COPYING
+#
+
 from flask import Flask, render_template, request, jsonify
 import time
 import board
@@ -56,6 +66,12 @@ def colors():
 
     pixels.fill(color)
     pixels.show()
+
+    return jsonify({"message":"color received"})
+
+@app.route('/rainbow', methods=['POST'])
+def rainbow():
+    rainbow_cycle(0.2)
 
     return jsonify({"message":"color received"})
 
