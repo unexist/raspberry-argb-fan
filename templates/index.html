@@ -16,9 +16,11 @@
   <h1>Color Controller</h1>
   <div id="colorPicker"></div>
   <button id="offButton">Off</button>
+  <button id="rainbowButton">Rainbow</button>
 
   <script>
     const offButton = document.getElementById('offButton');
+    const rainbowButton = document.getElementById('rainbowButton');
 
     // Initialize Iro.js color picker
     const colorPicker = new iro.ColorPicker('#colorPicker', {
@@ -55,6 +57,23 @@
       });
     }
 
+    function sendRainbow() {
+      fetch('/rainbow', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Server responded:', data);
+      })
+      .catch(error => {
+        console.error('Error sending color:', error);
+      });
+    }
+
+
     // Send color when user picks a new one
     colorPicker.on('color:change', (color) => {
       sendColor(color.hexString);
@@ -63,6 +82,11 @@
     // Send black (#000000) when "Off" button is pressed
     offButton.addEventListener('click', () => {
       sendColor('#000000');
+    });
+
+    // Send call to start rainbow iteration
+    rainbowButton.addEventListener('click', () => {
+      sendRainbow();
     });
   </script>
 </body>
