@@ -12,6 +12,7 @@ from flask import Flask, render_template, request, jsonify
 import time
 import board
 import neopixel
+from threading import Timer
 
 app = Flask(__name__)
 
@@ -44,13 +45,15 @@ def wheel(pos):
 
     return (r, g, b) if ORDER in (neopixel.RGB, neopixel.GRB) else (r, g, b, 0)
 
-def rainbow_cycle(wait):
+def rainbow_cycle():
     for j in range(255):
         for i in range(NUM_PIXELS):
             pixel_index = (i * 256 // NUM_PIXELS) + j
             pixels[i] = wheel(pixel_index & 255)
         pixels.show()
-        time.sleep(wait)
+        time.sleep(0.2)
+
+rainbow_timer = Timer(2.0, rainbow_cycle)
 
 @app.route('/')
 def index():
@@ -67,13 +70,18 @@ def colors():
     pixels.fill(color)
     pixels.show()
 
-    return jsonify({"message":"color received"})
+    return jsonify({"message": "Color received"})
 
 @app.route('/rainbow', methods=['POST'])
 def rainbow():
-    rainbow_cycle(0.2)
+    global rainbow_timer
 
-    return jsonify({"message":"color received"})
+    if rainbow_timer.is_alive():
+        rainbow_timer.cancel()
+    else:
+        rainbow_timer.start()
+
+    return jsonify({"message": "Rainbow started"})
 
 if __name__ == '__main__':
     pixels.fill((255, 0, 0))
