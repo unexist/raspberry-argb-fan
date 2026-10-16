@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Color Controller</title>
+  <style>
+    #colorPicker {
+      margin: 20px 0;
+    }
+  </style>
+  <!-- Iro.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+</head>
+<body>
+  <h1>Color Controller</h1>
+  <div id="colorPicker"></div>
+  <button id="offButton">Off</button>
+
+  <script>
+    const offButton = document.getElementById('offButton');
+
+    // Initialize Iro.js color picker
+    const colorPicker = new iro.ColorPicker('#colorPicker', {
+      width: 300,
+      color: '#ff0000',
+      layout: [
+        {
+          component: iro.ui.Wheel,
+          options: {}
+        },
+        {
+          component: iro.ui.Slider,
+          options: {
+            sliderType: 'value'
+          }
+        }
+      ]
+    });
+
+    function sendColor(colorValue) {
+      fetch('/colors', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ colordata: colorValue }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Server responded:', data);
+      })
+      .catch(error => {
+        console.error('Error sending color:', error);
+      });
+    }
+
+    // Send color when user picks a new one
+    colorPicker.on('color:change', (color) => {
+      sendColor(color.hexString);
+    });
+
+    // Send black (#000000) when "Off" button is pressed
+    offButton.addEventListener('click', () => {
+      sendColor('#000000');
+    });
+  </script>
+</body>
+</html>
