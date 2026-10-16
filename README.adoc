@@ -1,0 +1,7 @@
+= Raspberry ARGB Fan Control
+
+== Bill of material
+
+- Any Raspberry
+- ARCTIC P12 Pro Reverse A-RGB Fan
+- Connectors, wires and perfboard
