@@ -1,5 +1,10 @@
 = Raspberry ARGB Fan Control
 
+== Screenshots
+
+.Webview
+image::docs/screenshots/webview.png[]
+
 == Bill of material
 
 - Any Raspberry
